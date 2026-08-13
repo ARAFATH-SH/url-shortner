@@ -1,6 +1,6 @@
 package main
 
-import "url-shortner/cmd"
+import "url-shortener/cmd"
 
 func main() {
 	cmd.Serve()
