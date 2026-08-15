@@ -1,6 +1,8 @@
 package middlewares
 
-import "url-shortener/config"
+import (
+	"url-shortener/config"
+)
 
 type Middlewares struct {
 	cnf *config.Config

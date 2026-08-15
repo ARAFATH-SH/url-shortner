@@ -16,7 +16,7 @@ type DBConfig struct {
 	Port          int64
 	Name          string
 	User          string
-	password      string
+	Password      string
 	EnableSSLMode bool
 }
 
@@ -109,7 +109,7 @@ func loadConfig() {
 		Port:          dbPrt,
 		Name:          dbName,
 		User:          dbUser,
-		password:      dbPass,
+		Password:      dbPass,
 		EnableSSLMode: enableSSL,
 	}
 
