@@ -5,7 +5,11 @@ import (
 	"os"
 	"url-shortener/config"
 	"url-shortener/infra/db"
+	"url-shortener/repo"
 	"url-shortener/rest"
+	urlHandler "url-shortener/rest/handlers/url"
+	middleware "url-shortener/rest/middlewares"
+	"url-shortener/url"
 )
 
 func Serve() {
@@ -20,7 +24,23 @@ func Serve() {
 
 	err = db.MigrateDB(dbCon, "./migrations")
 
-	server := rest.NewServer(cnf)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	//repos
+	urlRepo := repo.NewUrlRepo(dbCon)
+
+	//domains
+	urlService := url.NewService(urlRepo)
+
+	middlewares := middleware.NewMiddlewares(cnf)
+
+	//handlers
+	urlHandler := urlHandler.NewHandler(middlewares, urlService)
+
+	server := rest.NewServer(cnf, urlHandler)
 
 	server.Start()
 }

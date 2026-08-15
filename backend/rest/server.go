@@ -5,16 +5,21 @@ import (
 	"net/http"
 	"strconv"
 	"url-shortener/config"
+	"url-shortener/rest/handlers/url"
 	middleware "url-shortener/rest/middlewares"
 )
 
 type Server struct {
-	cnf *config.Config
+	cnf        *config.Config
+	urlHandler *url.Handler
 }
 
-func NewServer(cnf *config.Config) *Server {
+func NewServer(cnf *config.Config,
+	urlHandler *url.Handler,
+) *Server {
 	return &Server{
-		cnf: cnf,
+		cnf:        cnf,
+		urlHandler: urlHandler,
 	}
 }
 
@@ -30,6 +35,8 @@ func (server *Server) Start() error {
 	)
 
 	wrappedMux := manager.WrapMux(mux)
+
+	server.urlHandler.RegisterRoutes(mux, manager)
 
 	address := ":" + strconv.Itoa(int(server.cnf.HttpPort))
 
