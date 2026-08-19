@@ -47,5 +47,5 @@ func (server *Server) Start() error {
 	if err != nil {
 		fmt.Println("Error starting server", err)
 	}
-	return http.ListenAndServe(address, wrappedMux)
+	return err
 }

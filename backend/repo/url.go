@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"fmt"
 	"url-shortener/domain"
 	"url-shortener/url"
 
@@ -28,12 +29,20 @@ func (r *urlRepo) Create(url domain.URL) (*domain.URL, error) {
 		VALUES ($1, $2)
 		RETURNING id
 	`
-	row := r.db.QueryRow(query, url.OriginalURL, url.ShortCode)
+
+	row := r.db.QueryRow(
+		query,
+		url.OriginalURL,
+		url.ShortCode,
+	)
+
 	err := row.Scan(&url.ID)
 
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println("INSERTED:", url)
 
 	return &url, nil
 }

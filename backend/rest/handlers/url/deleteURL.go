@@ -15,5 +15,5 @@ func (h *Handler) DeleteURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.SendData(w, http.StatusCreated, "Successfully deleted URL")
+	util.SendData(w, http.StatusNoContent, "Successfully deleted URL")
 }

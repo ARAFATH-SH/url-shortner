@@ -17,8 +17,6 @@ func GetConnectionString(cnf *config.DBConfig) string {
 		cnf.Name,
 	)
 
-	fmt.Println(cnf.Name)
-
 	if !cnf.EnableSSLMode {
 		connString += " sslmode=disable"
 	}
