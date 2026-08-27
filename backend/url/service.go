@@ -3,6 +3,7 @@ package url
 import (
 	"crypto/rand"
 	"errors"
+	"net/url"
 	"url-shortener/domain"
 )
 
@@ -19,6 +20,20 @@ func NewService(urlRepo URLRepo) Service {
 func (svc *service) Create(u domain.URL) (*domain.URL, error) {
 	if u.OriginalURL == "" {
 		return nil, errors.New("Original URL is required")
+	}
+
+	parsedURL, err := url.ParseRequestURI(u.OriginalURL)
+
+	if err != nil {
+		return nil, errors.New("invalid URL")
+	}
+
+	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+		return nil, errors.New("URL must use http or https")
+	}
+
+	if parsedURL.Host == "" {
+		return nil, errors.New("URL must contain a host")
 	}
 
 	shortCode, err := generateShortCode(6)

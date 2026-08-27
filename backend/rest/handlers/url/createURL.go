@@ -30,7 +30,7 @@ func (h *Handler) CreateURL(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
-		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
+		util.SendError(w, http.StatusBadRequest, "Please give me valid json")
 		return
 	}
 
