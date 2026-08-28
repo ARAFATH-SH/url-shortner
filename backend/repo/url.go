@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"database/sql"
 	"fmt"
 	"url-shortener/domain"
 	"url-shortener/url"
@@ -69,8 +70,22 @@ func (r *urlRepo) Delete(shortCode string) error {
 		WHERE short_code = $1
 	`
 
-	_, err := r.db.Exec(query, shortCode)
+	result, err := r.db.Exec(query, shortCode)
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	rows, err := result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
 
 }
