@@ -5,6 +5,8 @@ import (
 	"errors"
 	"net/url"
 	"url-shortener/domain"
+
+	"github.com/lib/pq"
 )
 
 type service struct {
@@ -36,14 +38,30 @@ func (svc *service) Create(u domain.URL) (*domain.URL, error) {
 		return nil, errors.New("URL must contain a host")
 	}
 
-	shortCode, err := generateShortCode(6)
+	const maxAttempts = 5
 
-	if err != nil {
+	for attempt := 0; attempt < maxAttempts; attempt++ {
+		shortCode, err := generateShortCode(6)
+
+		if err != nil {
+			return nil, err
+		}
+		u.ShortCode = shortCode
+
+		createdURL, err := svc.urlRepo.Create(u)
+
+		if err == nil {
+			return createdURL, nil
+		}
+
+		var pqErr *pq.Error
+
+		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
+			continue
+		}
 		return nil, err
 	}
-
-	u.ShortCode = shortCode
-	return svc.urlRepo.Create(u)
+	return nil, err
 }
 
 func (svc *service) FindByShortCode(shortCode string) (*domain.URL, error) {
