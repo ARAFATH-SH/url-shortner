@@ -13,6 +13,12 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middleware.Manager
 		),
 	)
 	mux.Handle(
+		"GET /urls",
+		manager.With(
+			http.HandlerFunc(h.ListURLs),
+		),
+	)
+	mux.Handle(
 		"GET /urls/{short_code}",
 		manager.With(
 			http.HandlerFunc(h.GetURL),

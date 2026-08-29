@@ -12,5 +12,6 @@ type Service interface {
 type URLRepo interface {
 	Create(u domain.URL) (*domain.URL, error)
 	FindByShortCode(shortCode string) (*domain.URL, error)
+	FindAll() ([]domain.URL, error)
 	Delete(shortCode string) error
 }

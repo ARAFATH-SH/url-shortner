@@ -64,6 +64,20 @@ func (r *urlRepo) FindByShortCode(shortCode string) (*domain.URL, error) {
 	return &url, nil
 }
 
+func (r *urlRepo) FindAll() ([]domain.URL, error) {
+	urls := []domain.URL{}
+	query := `
+		SELECT id, original_url, short_code
+		FROM urls
+		ORDER BY id DESC
+	`
+	err := r.db.Select(&urls, query)
+	if err != nil {
+		return nil, err
+	}
+	return urls, nil
+}
+
 func (r *urlRepo) Delete(shortCode string) error {
 	query := `
 		DELETE FROM urls

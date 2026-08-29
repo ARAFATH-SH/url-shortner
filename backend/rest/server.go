@@ -29,7 +29,6 @@ func (server *Server) Start() error {
 	mux := http.NewServeMux()
 
 	manager.Use(
-		middleware.Preflight,
 		middleware.Cors,
 		middleware.Logger,
 	)

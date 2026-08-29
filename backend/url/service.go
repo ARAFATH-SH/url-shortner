@@ -68,6 +68,10 @@ func (svc *service) FindByShortCode(shortCode string) (*domain.URL, error) {
 	return svc.urlRepo.FindByShortCode(shortCode)
 }
 
+func (svc *service) FindAll() ([]domain.URL, error) {
+	return svc.urlRepo.FindAll()
+}
+
 func (svc *service) Delete(shortCode string) error {
 	return svc.urlRepo.Delete(shortCode)
 }
